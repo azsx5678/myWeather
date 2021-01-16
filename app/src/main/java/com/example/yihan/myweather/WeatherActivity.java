@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.yihan.myweather.gson.Forecast;
 import com.example.yihan.myweather.gson.Weather;
 import com.example.yihan.myweather.util.HttpUtil;
@@ -73,7 +71,6 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
     }
-
     private void requestWeather(final String weatherId) {
        String weatherUrl="http://guolin.tech/api/weather?cityid="+weatherId+"&key=0c5a961831b24c61969b59158a752b3d";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
@@ -86,7 +83,6 @@ public class WeatherActivity extends AppCompatActivity {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final  String responseText=response.body().string();
@@ -107,7 +103,6 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
     }
-
     private void showWeatherInfo(Weather weather) {
         String cityName=weather.basic.cityName;
         String degree=weather.now.temperature+"°C";
@@ -132,15 +127,6 @@ public class WeatherActivity extends AppCompatActivity {
             maxText.setText(strInfo);
             forecastLayout.addView(view);
         }
-//        for(Forecast forecast:weather.forecastList){
-//            View view=LayoutInflater.from(this).inflate(R.layout.forecast_item,forecastLayout,false);
-//            TextView dateText = (TextView)view. findViewById(R.id.date_text);
-//            TextView  maxText = (TextView) view.findViewById(R.id.max_text);
-//            dateText.setText(forecast.date);
-//            String strInfo=forecast.temperature.max+"/"+forecast.temperature.min+"°C";
-//            maxText.setText(strInfo);
-//            forecastLayout.addView(view);
-//        }
         if(weather.aqi!=null){
             aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
@@ -148,7 +134,6 @@ public class WeatherActivity extends AppCompatActivity {
         String comfort="舒适度:"+weather.suggestion.comfort.info;
         String carWash="洗衣指数:"+weather.suggestion.carWash.info;
         String sport="运动建议:"+weather.suggestion.sport.info;
-
         comfortText.setText(comfort);
         carWashTest.setText(carWash);
         sportText.setText(sport);

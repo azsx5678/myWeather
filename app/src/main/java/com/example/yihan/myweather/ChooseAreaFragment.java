@@ -21,10 +21,15 @@ import android.widget.Toast;
 import com.example.yihan.myweather.db.City;
 import com.example.yihan.myweather.db.County;
 import com.example.yihan.myweather.db.Province;
+import com.example.yihan.myweather.db.WeatherSave;
+import com.example.yihan.myweather.gson.Weather;
 import com.example.yihan.myweather.util.HttpUtil;
 import com.example.yihan.myweather.util.Utility;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
+import org.litepal.LitePalApplication;
+import org.litepal.LitePalDB;
+import org.litepal.crud.LitePalSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,8 +82,11 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if(currentLevel==LEVEL_COUNTY){
                     String weatherId=countyList.get(position).getWeatherId();
-                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
+                    WeatherSave save=new WeatherSave();
+                    save.setWeather_Id(weatherId);
+                    save.setWeather_InfoSave("");
+                    save.save();
+                    Intent intent=new Intent(getActivity(),TextActivity.class);
                     startActivity(intent);
                     getActivity().finish();
                 }
@@ -100,7 +108,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryProvinces() {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
-        provinceList = DataSupport.findAll(Province.class);
+        provinceList = LitePal.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
             for (Province province : provinceList) {
@@ -119,7 +127,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities() {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
-        cityList = DataSupport.where("provinceId = ?", String.valueOf(selectedProvince.getId())).find(City.class);
+        cityList =LitePal.where("provinceId = ?", String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
             for (City city : cityList) {
@@ -138,7 +146,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityId = ?", String.valueOf(selectedCity.getId())).find(County.class);
+        countyList = LitePal.where("cityId = ?", String.valueOf(selectedCity.getId())).find(County.class);
         if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
